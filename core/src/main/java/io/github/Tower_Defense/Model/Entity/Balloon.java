@@ -33,9 +33,19 @@ public class Balloon implements IBalloon{
         return new Balloon(type, health, 0, 100, speed);
     }
 
-    public void move(float delta){
-        posX += Math.round(delta * speed);
-        // posY += delta * speed;
+    public void move(float delta, char direction){
+        if(direction == 'U'){
+            posY += Math.round(delta * speed);
+        }
+        else if(direction == 'D'){
+            posY += -Math.round(delta * speed);
+        }
+        else if(direction == 'R'){
+            posX += Math.round(delta * speed);
+        }
+        else if(direction == 'L'){
+            posX += -Math.round(delta * speed);
+        }
     }
 
     public int getHealth(){

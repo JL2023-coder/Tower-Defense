@@ -3,25 +3,23 @@ package io.github.Tower_Defense;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 
-import io.github.Tower_Defense.Model.GamePanel;
 import io.github.Tower_Defense.Model.Grid.Grid;
 import io.github.Tower_Defense.View.View;
+import io.github.Tower_Defense.ViewModel.ViewModel;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main implements ApplicationListener {
     // Instance Variables
     Grid grid;
     View view;
-    GamePanel gamePanel;
+    ViewModel gamePanel;
 
 
     @Override
     public void create() {
         grid = new Grid(60, 34);
-        gamePanel = new GamePanel();
-        view = new View(grid, gamePanel);
-
-        gamePanel.startGame();
+        ViewModel viewModel = new ViewModel();
+        view = new View(viewModel);
     }
 
     @Override
