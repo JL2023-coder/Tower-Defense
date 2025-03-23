@@ -1,12 +1,21 @@
-package io.github.some_example_name;
+package io.github.Tower_Defense;
 
 import com.badlogic.gdx.ApplicationListener;
 
+import io.github.Tower_Defense.Model.Grid.Grid;
+import io.github.Tower_Defense.View.View;
+
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main implements ApplicationListener {
+    // Instance Variables
+    Grid grid;
+    View view;
+
+
     @Override
     public void create() {
-        // Prepare your application here.
+        grid = new Grid(60, 34);
+        view = new View(grid);
     }
 
     @Override
@@ -16,7 +25,7 @@ public class Main implements ApplicationListener {
 
     @Override
     public void render() {
-        // Draw your application here.
+        view.renderGame();
     }
 
     @Override
@@ -31,6 +40,6 @@ public class Main implements ApplicationListener {
 
     @Override
     public void dispose() {
-        // Destroy application's resources here.
+        view.dispose();
     }
 }
