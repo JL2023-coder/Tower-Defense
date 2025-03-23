@@ -1,7 +1,9 @@
 package io.github.Tower_Defense;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
 
+import io.github.Tower_Defense.Model.GamePanel;
 import io.github.Tower_Defense.Model.Grid.Grid;
 import io.github.Tower_Defense.View.View;
 
@@ -10,12 +12,16 @@ public class Main implements ApplicationListener {
     // Instance Variables
     Grid grid;
     View view;
+    GamePanel gamePanel;
 
 
     @Override
     public void create() {
         grid = new Grid(60, 34);
-        view = new View(grid);
+        gamePanel = new GamePanel();
+        view = new View(grid, gamePanel);
+
+        gamePanel.startGame();
     }
 
     @Override
@@ -25,6 +31,11 @@ public class Main implements ApplicationListener {
 
     @Override
     public void render() {
+        // Update should be based on time not frames
+        float delta = Gdx.graphics.getDeltaTime();
+        // Updates game
+        gamePanel.update(delta);
+        // Renders game
         view.renderGame();
     }
 
