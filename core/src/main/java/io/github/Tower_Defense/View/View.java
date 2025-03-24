@@ -30,6 +30,7 @@ public class View {
         renderBalloons();
     }
 
+    // Renders all balloons, go through all balloons in list and updates position
     private void renderBalloons(){
         ArrayList<Balloon> balloons = viewModel.getBalloons();
         sRenderer.begin(ShapeType.Filled);
@@ -40,6 +41,7 @@ public class View {
         sRenderer.end();
     }
 
+    // Iterates through grid, and renders
     private void renderGrid(){
         int rows = viewModel.getGridRows();
         int cols = viewModel.getGridCols();
@@ -70,7 +72,9 @@ public class View {
         sRenderer.end();
     }
 
+    // Disposes of render
     public void dispose(){
+        // Disposes SRenderer
         sRenderer.dispose();
     }
 
