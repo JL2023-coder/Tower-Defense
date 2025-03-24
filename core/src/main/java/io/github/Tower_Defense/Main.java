@@ -12,13 +12,13 @@ public class Main implements ApplicationListener {
     // Instance Variables
     Grid grid;
     View view;
-    ViewModel gamePanel;
+    ViewModel viewModel;
 
 
     @Override
     public void create() {
         grid = new Grid(60, 34);
-        ViewModel viewModel = new ViewModel();
+        viewModel = new ViewModel(grid);
         view = new View(viewModel);
     }
 
@@ -32,7 +32,7 @@ public class Main implements ApplicationListener {
         // Update should be based on time not frames
         float delta = Gdx.graphics.getDeltaTime();
         // Updates game
-        gamePanel.update(delta);
+        viewModel.update(delta);
         // Renders game
         view.renderGame();
     }
