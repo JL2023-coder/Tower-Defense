@@ -22,8 +22,18 @@ public class Grid implements IGrid {
     }
 
     @Override
+    public void setRows(int rows) {
+        resizeGrid(rows, getCols());
+    }
+
+    @Override
     public int getCols() {
         return this.grid[0].length;
+    }
+
+    @Override
+    public void setCols(int cols) {
+        resizeGrid(getRows(), cols);
     }
 
     @Override
@@ -35,6 +45,12 @@ public class Grid implements IGrid {
     public int getValue(int row, int col) {
         return this.grid[row][col];
     }
+
+    @Override
+    public void resizeGrid(int newRows, int newCols) {
+        this.grid = new int[newRows][newCols];
+    }
+
 
 
 

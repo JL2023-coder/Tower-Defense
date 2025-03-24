@@ -3,6 +3,7 @@ package io.github.Tower_Defense.View;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
@@ -14,6 +15,7 @@ public class View {
     // Instance Variables
     int cellSize = 32;
     ViewModel viewModel;
+    private SpriteBatch batch;
 
     ShapeRenderer sRenderer;
 
@@ -46,20 +48,24 @@ public class View {
         int rows = viewModel.getGridRows();
         int cols = viewModel.getGridCols();
 
-        // Iterate thorugh cells, fills cells
-        sRenderer.begin(ShapeType.Filled);
-        for(int row = 0; row < rows; row++){
-            for(int col = 0; col < cols; col++){
-			    if(viewModel.getGridValue(row, col)==1){
-                    sRenderer.setColor(Color.BLACK);
-                }
-                else{
-                    sRenderer.setColor(Color.BLACK);
-                }
-                sRenderer.rect(col * cellSize, row * cellSize, cellSize, cellSize);
+        // Adding tiles
+        batch = new SpriteBatch();
+        batch.begin();
+        for (int row = 0; row < viewModel.getGridRows(); row++) {
+            for (int col = 0; col < viewModel.getGridCols(); col++) {
+
+                int x = col * cellSize;
+                int y = (viewModel.getGridRows() - row - 1) * cellSize;
+
+                // System.out.println("pos=" + pos);
+                // System.out.println("-----");
+                // System.out.println("value=" + gameBoard.get(pos));
+                // System.out.println("-----");
+                
+		        batch.draw(viewModel.getTileBatch(viewModel.getGridValue(row, col)), x, y, cellSize, cellSize);
             }
         }
-        sRenderer.end();
+        batch.end();
 
         // Iterates through cell, draw line
         sRenderer.begin(ShapeType.Line);
