@@ -27,6 +27,7 @@ public class ViewModel {
         this.grid = grid;
 
         // Add values to grid
+        // Should be removed and added to controller later
         initializeMap();
     }
 
