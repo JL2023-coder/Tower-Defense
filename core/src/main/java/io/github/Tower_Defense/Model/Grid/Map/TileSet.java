@@ -8,30 +8,30 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class TileSet {
     private static Texture tileSet;
-    private final int colTileSet = 8;
-    private final int tileSize = 32;
-    
+    private final static int colTileSet = 8;
+    private final static int tileSize = 32;
+        
     static {
         tileSet = getImage();
     }
-    
+        
     private static Texture getImage(){
         Texture tileSet = new Texture(Gdx.files.internal("core/src/main/java/io/github/Tower_Defense/Model/Grid/src/FieldsTileset.png"));
         return tileSet;
     }
-
+    
     // Returns TextureRegion, a subimage from tileSet.png, corresponding tile to tileNum
-    public TextureRegion getTile(int tileNum){
+    public static TextureRegion getTile(int tileNum){
         ArrayList<Integer> tilePos = tileNumToTilePosConverter(tileNum);
             int x = tilePos.get(1) * tileSize;
-            int y = tilePos.get(0) * tileSize;
-    
-            TextureRegion tile = new TextureRegion(tileSet, x, y, tileSize, tileSize);
+        int y = tilePos.get(0) * tileSize;
+
+        TextureRegion tile = new TextureRegion(tileSet, x, y, tileSize, tileSize);
         
         return tile;
     }
         
-    private ArrayList<Integer> tileNumToTilePosConverter(int tileNum){
+    private static ArrayList<Integer> tileNumToTilePosConverter(int tileNum){
         ArrayList<Integer> tilePostions = new ArrayList<Integer>(2);
 
         int rowNum = (tileNum) / colTileSet; 
