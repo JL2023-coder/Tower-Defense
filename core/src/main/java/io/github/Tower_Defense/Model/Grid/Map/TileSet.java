@@ -1,4 +1,4 @@
-package io.github.Tower_Defense.Model.Grid;
+package io.github.Tower_Defense.Model.Grid.Map;
 
 import java.util.ArrayList;
 
@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class TileSet {
     private static Texture tileSet;
-    private static int colTileSet = 8;
-    private static int tileSize = 32;
+    private final int colTileSet = 8;
+    private final int tileSize = 32;
     
     static {
         tileSet = getImage();
@@ -21,7 +21,7 @@ public class TileSet {
     }
 
     // Returns TextureRegion, a subimage from tileSet.png, corresponding tile to tileNum
-    public static TextureRegion getTile(int tileNum){
+    public TextureRegion getTile(int tileNum){
         ArrayList<Integer> tilePos = tileNumToTilePosConverter(tileNum);
             int x = tilePos.get(1) * tileSize;
             int y = tilePos.get(0) * tileSize;
@@ -31,7 +31,7 @@ public class TileSet {
         return tile;
     }
         
-    private static ArrayList<Integer> tileNumToTilePosConverter(int tileNum){
+    private ArrayList<Integer> tileNumToTilePosConverter(int tileNum){
         ArrayList<Integer> tilePostions = new ArrayList<Integer>(2);
 
         int rowNum = (tileNum) / colTileSet; 

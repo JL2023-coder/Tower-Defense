@@ -1,5 +1,7 @@
 package io.github.Tower_Defense.Model.Grid;
 
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+
 public class Grid implements IGrid {
     // Instance Variables
     private int[][] grid;
@@ -11,7 +13,7 @@ public class Grid implements IGrid {
         // Initalizes Grid with 0
         for(int row = 0; row < grid.length; row++){
             for(int col = 0; col < grid[0].length; col++){
-                setValue(0, row, col);
+                setValue(0, new CellPosition(row, col));
             }
         }
     }
@@ -37,13 +39,32 @@ public class Grid implements IGrid {
     }
 
     @Override
-    public void setValue(int value, int row, int col) {
-        this.grid[row][col] = value;
+    public void setValue(int value, CellPosition pos) {
+        int row = pos.row();
+        int col = pos.col();
+
+        if (positionIsOnGrid(pos) == false){
+            throw new IndexOutOfBoundsException("Out of bounds");
+        }
+        else{
+            grid[row][col] = value;
+        }
+
     }
 
     @Override
-    public int getValue(int row, int col) {
-        return this.grid[row][col];
+    public int getValue(CellPosition pos) {
+        int row = pos.row();
+        int col = pos.col();
+        // if position does not exist
+        // @return Out of bounds
+        if (positionIsOnGrid(pos) == false){
+            throw new IndexOutOfBoundsException("Out of bounds");
+        }
+        else{
+            return grid[row][col];
+        }
+
     }
 
     @Override
@@ -51,7 +72,14 @@ public class Grid implements IGrid {
         this.grid = new int[newRows][newCols];
     }
 
+    @Override
+    // @return True if position exist on grid
+    // false otherwise
+    public boolean positionIsOnGrid(CellPosition pos) {
+        int row = pos.row();
+        int col = pos.col();
 
-
+        return !(row < 0 || row >= getRows() || col <0 || col >=getCols());
+    }
 
 }

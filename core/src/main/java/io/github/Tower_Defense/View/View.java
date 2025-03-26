@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import io.github.Tower_Defense.Model.Entity.Balloon;
+import io.github.Tower_Defense.Model.Grid.CellPosition;
 import io.github.Tower_Defense.Model.Grid.Grid;
 import io.github.Tower_Defense.ViewModel.ViewModel;
 
@@ -53,16 +54,16 @@ public class View {
         batch.begin();
         for (int row = 0; row < viewModel.getGridRows(); row++) {
             for (int col = 0; col < viewModel.getGridCols(); col++) {
-
                 int x = col * cellSize;
                 int y = (viewModel.getGridRows() - row - 1) * cellSize;
 
+                int value = viewModel.getGridValue(new CellPosition(row, col));
                 // System.out.println("pos=" + pos);
                 // System.out.println("-----");
                 // System.out.println("value=" + gameBoard.get(pos));
                 // System.out.println("-----");
                 
-		        batch.draw(viewModel.getTileBatch(viewModel.getGridValue(row, col)), x, y, cellSize, cellSize);
+		        batch.draw(viewModel.getTileBatch(value), x, y, cellSize, cellSize);
             }
         }
         batch.end();

@@ -5,7 +5,8 @@ public interface IGrid {
     int getCols();
     void setRows(int rows);
     void setCols(int cols);
-    void setValue(int value, int row, int col);
-    int getValue(int row, int col);
+    void setValue(int value, CellPosition pos);
+    int getValue(CellPosition pos);
     void resizeGrid(int newRows, int newCols);
+    boolean positionIsOnGrid(CellPosition pos);
 }

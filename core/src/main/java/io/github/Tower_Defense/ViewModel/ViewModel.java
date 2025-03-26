@@ -8,8 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import io.github.Tower_Defense.Model.Entity.Balloon;
 import io.github.Tower_Defense.Model.Entity.BalloonFactory;
 import io.github.Tower_Defense.Model.Grid.CSVReader;
+import io.github.Tower_Defense.Model.Grid.CellPosition;
 import io.github.Tower_Defense.Model.Grid.Grid;
-import io.github.Tower_Defense.Model.Grid.TileSet;
+import io.github.Tower_Defense.Model.Grid.Map.TileSet;
 
 public class ViewModel {
     // Instance Variables
@@ -63,7 +64,7 @@ public class ViewModel {
     }
 
     // Add values to grid
-    private void initializeMap() {
+    public void initializeMap() {
         List<List<Integer>> map = getMap();
         // Update grid to match map size
         int rows = map.size();
@@ -73,9 +74,14 @@ public class ViewModel {
         for(int row = 0; row < rows; row++){
             for(int col = 0; col < cols; col++){
                 int value = map.get(row).get(col);
-                grid.setValue(value, row, col);
+                grid.setValue(value, new CellPosition(row, col));
             }
         }
+    }
+
+    // Gets path for balloons:), stored as a list with waypoints
+    private void getPath(){
+
     }
 
     // Return tile from tileset given tilenum
@@ -95,7 +101,7 @@ public class ViewModel {
     }
 
     // Returns value in gird, given row and col
-    public int getGridValue(int row, int col){
-        return grid.getValue(row, col);
+    public int getGridValue(CellPosition pos){
+        return grid.getValue(pos);
     }
 }
