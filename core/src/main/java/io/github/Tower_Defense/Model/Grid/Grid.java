@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 
 public class Grid implements IGrid {
     // Instance Variables
+    final int cellSize = 32;
     private int[][] grid;
 
     // Public Constructor
@@ -80,6 +81,10 @@ public class Grid implements IGrid {
         int col = pos.col();
 
         return !(row < 0 || row >= getRows() || col <0 || col >=getCols());
+    }
+
+    public int getCellSize() {
+        return cellSize;
     }
 
 }

@@ -4,21 +4,26 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 
 import io.github.Tower_Defense.Model.Grid.Grid;
+import io.github.Tower_Defense.Model.Grid.Map.Map;
 import io.github.Tower_Defense.View.View;
+import io.github.Tower_Defense.ViewModel.MapController;
 import io.github.Tower_Defense.ViewModel.ViewModel;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main implements ApplicationListener {
     // Instance Variables
     Grid grid;
+    Map map;
+    MapController mapController;
     View view;
     ViewModel viewModel;
 
 
     @Override
     public void create() {
-        grid = new Grid(60, 34);
-        viewModel = new ViewModel(grid);
+        map = new Map(60, 34);
+        mapController = new MapController(map);
+        viewModel = new ViewModel(mapController);
         view = new View(viewModel);
     }
 

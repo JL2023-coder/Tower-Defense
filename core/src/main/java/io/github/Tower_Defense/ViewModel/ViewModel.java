@@ -10,6 +10,7 @@ import io.github.Tower_Defense.Model.Entity.BalloonFactory;
 import io.github.Tower_Defense.Model.Grid.CSVReader;
 import io.github.Tower_Defense.Model.Grid.CellPosition;
 import io.github.Tower_Defense.Model.Grid.Grid;
+import io.github.Tower_Defense.Model.Grid.Map.Map;
 import io.github.Tower_Defense.Model.Grid.Map.TileSet;
 
 public class ViewModel {
@@ -21,15 +22,15 @@ public class ViewModel {
     static float SPAWN_INTERVAL = 3;
     // Time since last spawn
     float timeSinceLastSpawn = 0;
+    // Map map
+    Map map;
+    // MapController
+    MapController mapController;
 
     // Public constructor
-    public ViewModel(Grid grid){
+    public ViewModel(MapController mapController){
         this.factory = new BalloonFactory();
-        this.grid = grid;
-
-        // Add values to grid
-        // Should be removed and added to controller later
-        initializeMap();
+        this.mapController = mapController;
     }
 
     // Updates game, moves balloons and spawn in
@@ -49,7 +50,7 @@ public class ViewModel {
     private void spawnBalloon(float delta){
         timeSinceLastSpawn += delta;
         if(timeSinceLastSpawn >= SPAWN_INTERVAL){
-            balloons.add(factory.getNext());
+            balloons.add(factory.getNext(mapController.getStartPosX(), mapController.getStartPosY()));
             timeSinceLastSpawn = 0;
         }
     }
@@ -58,30 +59,8 @@ public class ViewModel {
         return balloons;
     }
 
-    // Returns a 2d array with map values
-    public List<List<Integer>> getMap(){
-        return CSVReader.readCSV("core/src/main/java/io/github/Tower_Defense/Model/Grid/src/map1.csv");
-    }
-
-    // Add values to grid
-    public void initializeMap() {
-        List<List<Integer>> map = getMap();
-        // Update grid to match map size
-        int rows = map.size();
-        int cols = map.get(0).size();
-        grid.setRows(rows);
-        grid.setCols(cols);
-        for(int row = 0; row < rows; row++){
-            for(int col = 0; col < cols; col++){
-                int value = map.get(row).get(col);
-                grid.setValue(value, new CellPosition(row, col));
-            }
-        }
-    }
-
-    // Gets path for balloons:), stored as a list with waypoints
-    private void getPath(){
-
+    public int getCellSize(){
+        return grid.getCellSize();
     }
 
     // Return tile from tileset given tilenum

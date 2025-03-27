@@ -18,7 +18,7 @@ public class Balloon implements IBalloon{
         this.speed = speed;
     }
 
-    public static Balloon newBalloon(String type){
+    public static Balloon newBalloon(String type, int posX, int posY){
         int health;
         int speed;
         switch (type) {
@@ -30,7 +30,7 @@ public class Balloon implements IBalloon{
                 throw new IllegalArgumentException("Uknown type");
         }
 
-        return new Balloon(type, health, 0, 100, speed);
+        return new Balloon(type, health, posX, posY, speed);
     }
 
     public void move(float delta, char direction){

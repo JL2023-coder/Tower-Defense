@@ -29,4 +29,12 @@ public class Map extends Grid {
         }
         throw new IndexOutOfBoundsException("Tile type " + tileType + " not found on the map.");
     }
+
+    public CellPosition getStartPos() {
+        return startPos;
+    }
+
+    public CellPosition getEndPos() {
+        return endPos;
+    }
 }
