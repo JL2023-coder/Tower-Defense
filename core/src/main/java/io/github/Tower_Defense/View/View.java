@@ -33,23 +33,21 @@ public class View {
 
     // Renders all balloons, go through all balloons in list and updates position
     private void renderBalloons(){
+        batch = new SpriteBatch();
+        batch.begin();
         ArrayList<Balloon> balloons = viewModel.getBalloons();
-        sRenderer.begin(ShapeType.Filled);
-        sRenderer.setColor(Color.BLUE);
         for(Balloon b:balloons){
-            sRenderer.rect(b.getPosX(), b.getPosY(), b.getWidth(), b.getHeight());
+            batch.draw(viewModel.getBalloonTexture(), b.getPosX() - b.getWidth()/2, b.getPosY() - b.getHeight()/4, b.getWidth()*2, b.getHeight()*2);
         }
-        sRenderer.end();
+        batch.end();
     }
 
     // Iterates through grid, and renders
     private void renderGrid(){
-        int rows = viewModel.getMapRows();
-        int cols = viewModel.getMapCols();
-
-        // Adding tiles
         batch = new SpriteBatch();
         batch.begin();
+
+        // Adding tiles
         for (int row = 0; row < viewModel.getMapRows(); row++) {
             for (int col = 0; col < viewModel.getMapCols(); col++) {
                 int x = col * viewModel.getCellSize();
@@ -66,21 +64,26 @@ public class View {
         }
         batch.end();
 
-        // Iterates through cell, draw line
+        /* // Iterates through cell, draw line
         sRenderer.begin(ShapeType.Line);
+
+        int rows = viewModel.getMapRows();
+        int cols = viewModel.getMapCols();
+        
         for(int row = 0; row < rows; row++){
             for(int col = 0; col < cols; col++){
 			    sRenderer.setColor(Color.RED);
                 sRenderer.rect(col * viewModel.getCellSize(), row * viewModel.getCellSize(), viewModel.getCellSize(), viewModel.getCellSize());
             }
         }
-        sRenderer.end();
+        sRenderer.end(); */
     }
 
     // Disposes of render
     public void dispose(){
         // Disposes SRenderer
         sRenderer.dispose();
+        batch.dispose();;
     }
 
 }
