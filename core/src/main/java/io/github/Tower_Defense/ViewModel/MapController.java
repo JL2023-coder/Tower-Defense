@@ -13,7 +13,7 @@ public class MapController {
     private CellPosition lastPos;
 
     public MapController(){
-        this.map = new Map(10, 10, "map1");
+        this.map = new Map(1, 1, "map1");
     }
 
     public int getStartPosX(){
