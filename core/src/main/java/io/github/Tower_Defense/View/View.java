@@ -2,10 +2,8 @@ package io.github.Tower_Defense.View;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import io.github.Tower_Defense.Model.Entity.Balloon;
 import io.github.Tower_Defense.Model.Grid.CellPosition;
