@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import io.github.Tower_Defense.Model.Entity.Balloon;
 import io.github.Tower_Defense.Model.Entity.BalloonFactory;
+import io.github.Tower_Defense.Model.Entity.BalloonTexture;
 import io.github.Tower_Defense.Model.Grid.CellPosition;
 import io.github.Tower_Defense.Model.Grid.Map.TileSet;
 
 public class ViewModel {
     // Instance Variables
     BalloonFactory factory;
+    // List of balloons
     ArrayList<Balloon> balloons = new ArrayList<Balloon>();
     // Map to store current direction for each balloon
     private Map<Balloon, Character> balloonDirections = new HashMap<>();
@@ -118,6 +121,11 @@ public class ViewModel {
     // Return tile from tileset given tilenum
     public TextureRegion getTileBatch(int tileNum){
         return TileSet.getTile(tileNum);
+    }
+
+    // Return tile from tileset given tilenum
+    public Texture getBalloonTexture(){
+        return BalloonTexture.getBalloonTexture();
     }
 
 
