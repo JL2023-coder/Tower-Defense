@@ -4,8 +4,8 @@ public class Balloon implements IBalloon{
     private int health;
     private int posX;
     private int posY;
-    private static int width = 32;
-    private static int height = 32;
+    private static int width = 64;
+    private static int height = 64;
     private String balloonType;
     // Contains a vector with x,y where they represent direction and speed
     private int speed;

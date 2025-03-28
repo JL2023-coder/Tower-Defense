@@ -2,10 +2,12 @@ package io.github.Tower_Defense.View;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import io.github.Tower_Defense.Model.Entity.Balloon;
+import io.github.Tower_Defense.Model.Entity.BalloonRenderData;
 import io.github.Tower_Defense.Model.Grid.CellPosition;
 import io.github.Tower_Defense.ViewModel.ViewModel;
 
@@ -25,26 +27,32 @@ public class View {
 
     // Renders game, grid, objects etc
     public void renderGame(){
+        batch = new SpriteBatch();
+        batch.begin();
         renderGrid();
         renderBalloons();
+        batch.end();
     }
 
     // Renders all balloons, go through all balloons in list and updates position
     private void renderBalloons(){
-        batch = new SpriteBatch();
-        batch.begin();
-        ArrayList<Balloon> balloons = viewModel.getBalloons();
-        for(Balloon b:balloons){
-            batch.draw(viewModel.getBalloonTexture(), b.getPosX() - b.getWidth()/2, b.getPosY() - b.getHeight()/4, b.getWidth()*2, b.getHeight()*2);
+        Sprite sprite = new Sprite(viewModel.getBalloonTexture());
+        ArrayList<BalloonRenderData> balloonRenderDatas = viewModel.getBalloonsRenderData();
+        for(BalloonRenderData b : balloonRenderDatas){
+            // Config
+            int posX = b.x;
+            int posY = b.y;
+            int width = b.width;
+            int height = b.height;
+            sprite.setSize(width, height);
+            sprite.setOriginCenter();  // Sets origin to (width/2, height/2)
+            sprite.setPosition(posX - viewModel.getCellSize()/2, posY - height / 2); // Centers it
+            sprite.draw(batch);
         }
-        batch.end();
     }
 
     // Iterates through grid, and renders
     private void renderGrid(){
-        batch = new SpriteBatch();
-        batch.begin();
-
         // Adding tiles
         for (int row = 0; row < viewModel.getMapRows(); row++) {
             for (int col = 0; col < viewModel.getMapCols(); col++) {
@@ -60,7 +68,6 @@ public class View {
 		        batch.draw(viewModel.getTileBatch(value), x, y, viewModel.getCellSize(), viewModel.getCellSize());
             }
         }
-        batch.end();
 
         /* // Iterates through cell, draw line
         sRenderer.begin(ShapeType.Line);

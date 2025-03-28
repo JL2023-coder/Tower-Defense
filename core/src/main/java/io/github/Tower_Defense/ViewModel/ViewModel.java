@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import io.github.Tower_Defense.Model.Entity.Balloon;
 import io.github.Tower_Defense.Model.Entity.BalloonFactory;
+import io.github.Tower_Defense.Model.Entity.BalloonRenderData;
 import io.github.Tower_Defense.Model.Entity.BalloonTexture;
 import io.github.Tower_Defense.Model.Grid.CellPosition;
 import io.github.Tower_Defense.Model.Grid.Map.TileSet;
@@ -21,7 +22,7 @@ public class ViewModel {
     // Map to store current direction for each balloon
     private Map<Balloon, Character> balloonDirections = new HashMap<>();
     // Time between each spawn
-    static float SPAWN_INTERVAL = 3;
+    static float SPAWN_INTERVAL = 0.5f;
     // Time since last spawn
     float timeSinceLastSpawn = 0;
     // MapController
@@ -47,10 +48,6 @@ public class ViewModel {
     }
 
     private char getBalloonDirection(int posX, int posY){
-        // Check if balloon is fully within a cell
-        boolean isFullyInCell = (posX % mapController.getCellSize() == 0) && 
-                              (posY % mapController.getCellSize() == 0);
-        
         CellPosition pos = pixelToCellPositionConverter(posX, posY);
         CellPosition nextWayPoint = mapController.getNextWayPoint(pos);
         char direction = getDirectionFromCurrrentPosAndWayPoint(pos, nextWayPoint);
@@ -58,7 +55,7 @@ public class ViewModel {
         // Find the balloon and update/return its direction
         for(Balloon b : balloons) {
             if(b.getPosX() == posX && b.getPosY() == posY) {
-                if (isFullyInCell) {
+                if (isFullyInCell(posX, posY)) {
                     balloonDirections.put(b, direction);
                 }
                 return balloonDirections.getOrDefault(b, direction);
@@ -66,6 +63,11 @@ public class ViewModel {
         }
         
         return direction;
+    }
+
+    // Check if balloon is fully in cell
+    private boolean isFullyInCell(int posX, int posY){
+        return posX % mapController.getCellSize() == 0 && posY % mapController.getCellSize() == 0;
     }
 
     private char getDirectionFromCurrrentPosAndWayPoint(CellPosition pos, CellPosition wayPoint){
@@ -90,7 +92,7 @@ public class ViewModel {
 
     private CellPosition pixelToCellPositionConverter(int posX, int posY){
         // Back to simple conversion
-        int row = mapController.getMapRows() - (posY / mapController.getCellSize()) - 1;
+        int row = mapController.getMapRows() - (posY / mapController.getCellSize());
         int col = posX / mapController.getCellSize();
         
         return new CellPosition(row, col);
@@ -105,13 +107,25 @@ public class ViewModel {
             Balloon newBalloon = factory.getNext(spawnPosX, spawnPosY);
             balloons.add(newBalloon);
             // Initialize direction for new balloon
-            balloonDirections.put(newBalloon, 'R'); // or whatever initial direction
+            balloonDirections.put(newBalloon, 'D'); // or whatever initial direction
             timeSinceLastSpawn = 0;
         }
     }
+
+
     // Returns list of all balloons
-    public ArrayList<Balloon> getBalloons(){
-        return balloons;
+    public ArrayList<BalloonRenderData> getBalloonsRenderData(){
+        ArrayList<BalloonRenderData> balloonsRenderData = new ArrayList<>();
+        for(Balloon b : balloons){
+            int x = b.getPosX();
+            int y = b.getPosY();
+            int width = b.getWidth();
+            int height = b.getHeight();
+
+            balloonsRenderData.add(new BalloonRenderData(x, y, width, height, getBalloonTexture()));
+        }
+
+        return balloonsRenderData;
     }
 
     public int getCellSize(){
@@ -127,7 +141,6 @@ public class ViewModel {
     public Texture getBalloonTexture(){
         return BalloonTexture.getBalloonTexture();
     }
-
 
     // Return num of rows
     public int getMapRows(){
