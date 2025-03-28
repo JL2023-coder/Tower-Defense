@@ -1,22 +1,22 @@
 package io.github.Tower_Defense.ViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 
 import io.github.Tower_Defense.Model.Entity.Balloon;
 import io.github.Tower_Defense.Model.Entity.BalloonFactory;
-import io.github.Tower_Defense.Model.Grid.CSVReader;
 import io.github.Tower_Defense.Model.Grid.CellPosition;
-import io.github.Tower_Defense.Model.Grid.Grid;
 import io.github.Tower_Defense.Model.Grid.Map.TileSet;
 
 public class ViewModel {
     // Instance Variables
     BalloonFactory factory;
     ArrayList<Balloon> balloons = new ArrayList<Balloon>();
+    // Map to store current direction for each balloon
+    private Map<Balloon, Character> balloonDirections = new HashMap<>();
     // Time between each spawn
     static float SPAWN_INTERVAL = 3;
     // Time since last spawn
@@ -44,20 +44,36 @@ public class ViewModel {
     }
 
     private char getBalloonDirection(int posX, int posY){
+        // Check if balloon is fully within a cell
+        boolean isFullyInCell = (posX % mapController.getCellSize() == 0) && 
+                              (posY % mapController.getCellSize() == 0);
+        
         CellPosition pos = pixelToCellPositionConverter(posX, posY);
         CellPosition nextWayPoint = mapController.getNextWayPoint(pos);
-
-        return getDirectionFromCurrrentPosAndWayPoint(pos, nextWayPoint);
+        char direction = getDirectionFromCurrrentPosAndWayPoint(pos, nextWayPoint);
+        
+        // Find the balloon and update/return its direction
+        for(Balloon b : balloons) {
+            if(b.getPosX() == posX && b.getPosY() == posY) {
+                if (isFullyInCell) {
+                    balloonDirections.put(b, direction);
+                }
+                return balloonDirections.getOrDefault(b, direction);
+            }
+        }
+        
+        return direction;
     }
 
     private char getDirectionFromCurrrentPosAndWayPoint(CellPosition pos, CellPosition wayPoint){
+        // Handle vertical movement first
         if(pos.row() > wayPoint.row()){
             return 'U';
         }
         else if(pos.row() < wayPoint.row()){
             return 'D';
         }
-
+        // Only handle horizontal movement if we're on the correct row
         else if(pos.col() < wayPoint.col()){
             return 'R';
         }
@@ -68,10 +84,12 @@ public class ViewModel {
             throw new IllegalArgumentException("Could not get Direction");
         }
     }
-    private CellPosition pixelToCellPositionConverter(int posX, int posY){
-        int row = mapController.getMapRows() - (posY + mapController.getCellSize() - 1) / mapController.getCellSize() - 1;
-        int col = posX / mapController.getCellSize();
 
+    private CellPosition pixelToCellPositionConverter(int posX, int posY){
+        // Back to simple conversion
+        int row = mapController.getMapRows() - (posY / mapController.getCellSize()) - 1;
+        int col = posX / mapController.getCellSize();
+        
         return new CellPosition(row, col);
     }
 
@@ -81,7 +99,10 @@ public class ViewModel {
         if(timeSinceLastSpawn >= SPAWN_INTERVAL){
             int spawnPosX = mapController.getStartPosX();
             int spawnPosY = mapController.getStartPosY();
-            balloons.add(factory.getNext(spawnPosX, spawnPosY));
+            Balloon newBalloon = factory.getNext(spawnPosX, spawnPosY);
+            balloons.add(newBalloon);
+            // Initialize direction for new balloon
+            balloonDirections.put(newBalloon, 'R'); // or whatever initial direction
             timeSinceLastSpawn = 0;
         }
     }
