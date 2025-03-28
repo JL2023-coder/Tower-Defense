@@ -9,12 +9,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import io.github.Tower_Defense.Model.Entity.Balloon;
 import io.github.Tower_Defense.Model.Grid.CellPosition;
-import io.github.Tower_Defense.Model.Grid.Grid;
 import io.github.Tower_Defense.ViewModel.ViewModel;
 
 public class View {
     // Instance Variables
-    int cellSize = 32;
     ViewModel viewModel;
     private SpriteBatch batch;
 
@@ -46,24 +44,24 @@ public class View {
 
     // Iterates through grid, and renders
     private void renderGrid(){
-        int rows = viewModel.getGridRows();
-        int cols = viewModel.getGridCols();
+        int rows = viewModel.getMapRows();
+        int cols = viewModel.getMapCols();
 
         // Adding tiles
         batch = new SpriteBatch();
         batch.begin();
-        for (int row = 0; row < viewModel.getGridRows(); row++) {
-            for (int col = 0; col < viewModel.getGridCols(); col++) {
-                int x = col * cellSize;
-                int y = (viewModel.getGridRows() - row - 1) * cellSize;
+        for (int row = 0; row < viewModel.getMapRows(); row++) {
+            for (int col = 0; col < viewModel.getMapCols(); col++) {
+                int x = col * viewModel.getCellSize();
+                int y = (viewModel.getMapRows() - row - 1) * viewModel.getCellSize();
 
-                int value = viewModel.getGridValue(new CellPosition(row, col));
+                int value = viewModel.getMapValue(new CellPosition(row, col));
                 // System.out.println("pos=" + pos);
                 // System.out.println("-----");
                 // System.out.println("value=" + gameBoard.get(pos));
                 // System.out.println("-----");
                 
-		        batch.draw(viewModel.getTileBatch(value), x, y, cellSize, cellSize);
+		        batch.draw(viewModel.getTileBatch(value), x, y, viewModel.getCellSize(), viewModel.getCellSize());
             }
         }
         batch.end();
@@ -73,7 +71,7 @@ public class View {
         for(int row = 0; row < rows; row++){
             for(int col = 0; col < cols; col++){
 			    sRenderer.setColor(Color.RED);
-                sRenderer.rect(col * cellSize, row * cellSize, cellSize, cellSize);
+                sRenderer.rect(col * viewModel.getCellSize(), row * viewModel.getCellSize(), viewModel.getCellSize(), viewModel.getCellSize());
             }
         }
         sRenderer.end();

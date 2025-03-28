@@ -5,10 +5,10 @@ import java.util.ArrayList;
 public class BalloonFactory implements IBalloonFactory{
 
     @Override
-    public Balloon getNext() {
+    public Balloon getNext(int posX, int posY) {
         ArrayList baloonTypes = new ArrayList<String>();
         baloonTypes.add("base");
-        return Balloon.newBalloon("base");
+        return Balloon.newBalloon("base", posX, posY);
     }
 
 

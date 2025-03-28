@@ -1,10 +1,9 @@
 package io.github.Tower_Defense.Model.Grid;
 
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-
 public class Grid implements IGrid {
     // Instance Variables
     private int[][] grid;
+    private final int cellSize = 32;
 
     // Public Constructor
     public Grid(int rows, int cols){
@@ -16,6 +15,10 @@ public class Grid implements IGrid {
                 setValue(0, new CellPosition(row, col));
             }
         }
+    }
+
+    public int getCellSize() {
+        return cellSize;
     }
 
     @Override
