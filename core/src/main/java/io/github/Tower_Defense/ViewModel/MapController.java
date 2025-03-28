@@ -68,7 +68,6 @@ public class MapController {
     // Returns next waypoint
     public CellPosition getNextWayPoint(CellPosition pos){
         try {
-            System.out.println(path);
             return path.get(pos);
         } catch (Exception e) {
             throw new IllegalArgumentException("Could not get next waypoint");
