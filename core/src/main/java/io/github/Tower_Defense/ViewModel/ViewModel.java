@@ -54,14 +54,14 @@ public class ViewModel {
         if(pos.row() > wayPoint.row()){
             return 'U';
         }
-        else if(pos.row() > wayPoint.row()){
+        else if(pos.row() < wayPoint.row()){
             return 'D';
         }
 
-        else if(pos.col() < wayPoint.row()){
+        else if(pos.col() < wayPoint.col()){
             return 'R';
         }
-        else if(pos.col() < wayPoint.row()){
+        else if(pos.col() > wayPoint.col()){
             return 'L';
         }
         else{
@@ -69,7 +69,7 @@ public class ViewModel {
         }
     }
     private CellPosition pixelToCellPositionConverter(int posX, int posY){
-        int row = mapController.getMapRows() - posY / mapController.getCellSize() - 1;
+        int row = mapController.getMapRows() - (posY + mapController.getCellSize() - 1) / mapController.getCellSize() - 1;
         int col = posX / mapController.getCellSize();
 
         return new CellPosition(row, col);

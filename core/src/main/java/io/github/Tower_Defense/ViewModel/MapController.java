@@ -12,7 +12,7 @@ public class MapController {
     // Instance Variables
     private Map map;
     private HashMap<CellPosition, CellPosition> path = new HashMap<>();
-    private CellPosition lastPos;
+    private HashSet<CellPosition> visited = new HashSet<>();
 
     public MapController(){
         this.map = new Map(1, 1, "map1");
@@ -29,10 +29,18 @@ public class MapController {
 
     // Pathfinding
     public void findPath(CellPosition startPos) {
+        
+        // Clear visited set when starting a new path search
+        if (visited.isEmpty()) {
+            visited.clear();
+            path.clear();
+        }
+        
+        visited.add(startPos);
         ArrayList<CellPosition> neighbours = getNeighbours(startPos);
         
         for (CellPosition pos : neighbours) {
-            if (pos.equals(lastPos) || notValidWayPoint(startPos)) {
+            if (visited.contains(pos) || notValidWayPoint(pos)) {
                 continue;
             }
             
@@ -40,24 +48,20 @@ public class MapController {
 
             if (TileType.END.getValue() == tileValue) {
                 path.put(startPos, pos);
-                return; // Stop searching if we found the endpoint
+                return;
             } 
             
             if (TileType.BLOCKED.getValue() != tileValue) {
                 path.put(startPos, pos);
                 findPath(pos);
+                return;
             }
         }
     }
 
-
     private boolean notValidWayPoint(CellPosition pos){
-        if(pos.row() <= map.getRows() && pos.row() >= 0 && pos.col() <= map.getCols() && pos.col() >= 0){
-            return false;
-        }
-        else{
-            return true;
-        }
+        return pos.row() >= map.getRows() || pos.row() < 0 || 
+               pos.col() >= map.getCols() || pos.col() < 0;
     }
     
 
