@@ -115,18 +115,14 @@ public class ViewModel {
 
     // Returns list of all balloons
     public ArrayList<BalloonRenderData> getBalloonsRenderData(){
-        ArrayList<BalloonRenderData> balloonsRenderData = new ArrayList<>();
+        ArrayList<BalloonRenderData> balloonsRenderData = new ArrayList<>(balloons.size());
+        Texture texture = getBalloonTexture(); 
         for(Balloon b : balloons){
-            int x = b.getPosX();
-            int y = b.getPosY();
-            int width = b.getWidth();
-            int height = b.getHeight();
-
-            balloonsRenderData.add(new BalloonRenderData(x, y, width, height, getBalloonTexture()));
+            balloonsRenderData.add(new BalloonRenderData(b.getPosX(), b.getPosY(), b.getWidth(), b.getHeight(), texture));
         }
-
         return balloonsRenderData;
     }
+    
 
     public int getCellSize(){
         return mapController.getCellSize();
