@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 
 import io.github.Tower_Defense.Model.Entity.Balloon;
 import io.github.Tower_Defense.Model.Entity.BalloonFactory;
@@ -38,8 +39,40 @@ public class ViewModel {
     // Move all balloons in list
     private void moveBalloons(float delta){
         for(Balloon b:balloons){
-            b.move(delta, 'R');
+            b.move(delta, getBalloonDirection(b.getPosX(), b.getPosY()));
         }
+    }
+
+    private char getBalloonDirection(int posX, int posY){
+        CellPosition pos = pixelToCellPositionConverter(posX, posY);
+        CellPosition nextWayPoint = mapController.getNextWayPoint(pos);
+
+        return getDirectionFromCurrrentPosAndWayPoint(pos, nextWayPoint);
+    }
+
+    private char getDirectionFromCurrrentPosAndWayPoint(CellPosition pos, CellPosition wayPoint){
+        if(pos.row() > wayPoint.row()){
+            return 'U';
+        }
+        else if(pos.row() > wayPoint.row()){
+            return 'D';
+        }
+
+        else if(pos.col() < wayPoint.row()){
+            return 'R';
+        }
+        else if(pos.col() < wayPoint.row()){
+            return 'L';
+        }
+        else{
+            throw new IllegalArgumentException("Could not get Direction");
+        }
+    }
+    private CellPosition pixelToCellPositionConverter(int posX, int posY){
+        int row = mapController.getMapRows() - posY / mapController.getCellSize() - 1;
+        int col = posX / mapController.getCellSize();
+
+        return new CellPosition(row, col);
     }
 
     // Spawns balloon if timeSinceLastSpawn is larger than SpawnInterval

@@ -1,6 +1,8 @@
 package io.github.Tower_Defense.ViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import io.github.Tower_Defense.Model.Grid.CellPosition;
 import io.github.Tower_Defense.Model.Grid.Map.Map;
@@ -9,11 +11,12 @@ import io.github.Tower_Defense.Model.Grid.Map.TileType;
 public class MapController {
     // Instance Variables
     private Map map;
-    private ArrayList<CellPosition> path;
+    private HashMap<CellPosition, CellPosition> path = new HashMap<>();
     private CellPosition lastPos;
 
     public MapController(){
         this.map = new Map(1, 1, "map1");
+        findPath(map.getStartPos());
     }
 
     public int getStartPosX(){
@@ -21,25 +24,50 @@ public class MapController {
     }
 
     public int getStartPosY(){
-        return ((map.getRows() - map.getStartPos().row() - 1) * map.getCellSize());
+        return (map.getRows() - map.getStartPos().row() - 1) * map.getCellSize();
     }
 
     // Pathfinding
-    public void findPath(CellPosition startPos){
+    public void findPath(CellPosition startPos) {
         ArrayList<CellPosition> neighbours = getNeighbours(startPos);
-        for(CellPosition pos : neighbours){
-            map.getValue(startPos);
-            if(pos == lastPos) {
+        
+        for (CellPosition pos : neighbours) {
+            if (pos.equals(lastPos) || notValidWayPoint(startPos)) {
                 continue;
             }
-            else if(TileType.END.getValue() == map.getValue(pos)) {
-                path.add(pos);
-            }
-            else if(TileType.BLOCKED.getValue() != map.getValue(pos)) {
-                path.add(pos);
-                lastPos = pos;
+            
+            int tileValue = map.getValue(pos);
+
+            if (TileType.END.getValue() == tileValue) {
+                path.put(startPos, pos);
+                return; // Stop searching if we found the endpoint
+            } 
+            
+            if (TileType.BLOCKED.getValue() != tileValue) {
+                path.put(startPos, pos);
                 findPath(pos);
             }
+        }
+    }
+
+
+    private boolean notValidWayPoint(CellPosition pos){
+        if(pos.row() <= map.getRows() && pos.row() >= 0 && pos.col() <= map.getCols() && pos.col() >= 0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    
+
+    // Returns next waypoint
+    public CellPosition getNextWayPoint(CellPosition pos){
+        try {
+            System.out.println(path);
+            return path.get(pos);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Could not get next waypoint");
         }
     }
 
