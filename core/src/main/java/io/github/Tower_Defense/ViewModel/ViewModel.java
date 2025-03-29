@@ -24,7 +24,7 @@ public class ViewModel {
     // BalloownTexture
     Texture balloonTexture;
     // Time between each spawn
-    static float SPAWN_INTERVAL = 0.3f;
+    static float SPAWN_INTERVAL = 0.8f;
     // Time since last spawn
     float timeSinceLastSpawn = 0;
     // MapController
@@ -58,7 +58,7 @@ public class ViewModel {
         // Find the balloon and update/return its direction
         for(Balloon b : balloons) {
             if(b.getPosX() == posX && b.getPosY() == posY) {
-                if (isFullyInCell(posX, posY)) {
+                if (isInMiddleOfCell(posX, posY)) {
                     balloonDirections.put(b, direction);
                 }
                 return balloonDirections.getOrDefault(b, direction);
@@ -68,9 +68,14 @@ public class ViewModel {
         return direction;
     }
 
-    // Check if balloon is fully in cell
-    private boolean isFullyInCell(int posX, int posY){
-        return posX % mapController.getCellSize() == 0 && posY % mapController.getCellSize() == 0;
+    // Check if balloon is approximately in the middle of a cell
+    private boolean isInMiddleOfCell(int posX, int posY) {
+        int cellSize = mapController.getCellSize();
+        int cellCenterOffset = cellSize / 2;
+        int tolerance = 4; // Allowable deviation in pixels
+
+        return Math.abs((posX % cellSize) - cellCenterOffset) <= tolerance &&
+               Math.abs((posY % cellSize) - cellCenterOffset) <= tolerance;
     }
 
     private char getDirectionFromCurrrentPosAndWayPoint(CellPosition pos, CellPosition wayPoint){
@@ -105,8 +110,8 @@ public class ViewModel {
     private void spawnBalloon(float delta){
         timeSinceLastSpawn += delta;
         if(timeSinceLastSpawn >= SPAWN_INTERVAL){
-            int spawnPosX = mapController.getStartPosX();
-            int spawnPosY = mapController.getStartPosY();
+            int spawnPosX = mapController.getStartPosX() + getCellSize()/2;
+            int spawnPosY = mapController.getStartPosY() + getCellSize()/2;
             Balloon newBalloon = factory.getNext(spawnPosX, spawnPosY);
             balloons.add(newBalloon);
             // Initialize direction for new balloon

@@ -3,6 +3,7 @@ package io.github.Tower_Defense.View;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -13,7 +14,8 @@ import io.github.Tower_Defense.ViewModel.ViewModel;
 public class View {
     // Instance Variables
     ViewModel viewModel;
-    private SpriteBatch batch;
+    SpriteBatch batch;
+    Sprite sprite;
 
     ShapeRenderer sRenderer;
 
@@ -35,11 +37,12 @@ public class View {
     private void renderBalloons(){
         ArrayList<BalloonRenderData> balloonRenderDatas = viewModel.getBalloonsRenderData();
         Texture balloonTexture = viewModel.getBalloonTexture();
+        sprite = new Sprite(balloonTexture);
         for(BalloonRenderData b : balloonRenderDatas){
             // Config
-            batch.draw(balloonTexture,
-                   b.x - b.width / 2, b.y - b.height / 2,  // Centering
-                   b.width, b.height);
+            sprite.setSize(b.width, b.height);
+            sprite.setPosition(b.x - 32, b.y - 48);
+            sprite.draw(batch);
         }
     }
 

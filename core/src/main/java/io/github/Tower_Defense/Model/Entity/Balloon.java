@@ -24,7 +24,7 @@ public class Balloon implements IBalloon{
         switch (type) {
             case "base":
                 health = 100;
-                speed = 50;
+                speed = 100;
                 break;
             default:
                 throw new IllegalArgumentException("Uknown type");
