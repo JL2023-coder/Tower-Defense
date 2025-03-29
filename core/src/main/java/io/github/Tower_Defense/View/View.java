@@ -2,11 +2,10 @@ package io.github.Tower_Defense.View;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import io.github.Tower_Defense.Model.Entity.Balloon;
 import io.github.Tower_Defense.Model.Entity.BalloonRenderData;
 import io.github.Tower_Defense.Model.Grid.CellPosition;
 import io.github.Tower_Defense.ViewModel.ViewModel;
@@ -35,9 +34,10 @@ public class View {
     // Renders all balloons, go through all balloons in list and updates position
     private void renderBalloons(){
         ArrayList<BalloonRenderData> balloonRenderDatas = viewModel.getBalloonsRenderData();
+        Texture balloonTexture = viewModel.getBalloonTexture();
         for(BalloonRenderData b : balloonRenderDatas){
             // Config
-            batch.draw(viewModel.getBalloonTexture(),
+            batch.draw(balloonTexture,
                    b.x - b.width / 2, b.y - b.height / 2,  // Centering
                    b.width, b.height);
         }

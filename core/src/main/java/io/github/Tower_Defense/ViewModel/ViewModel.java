@@ -21,8 +21,10 @@ public class ViewModel {
     ArrayList<Balloon> balloons = new ArrayList<Balloon>();
     // Map to store current direction for each balloon
     private Map<Balloon, Character> balloonDirections = new HashMap<>();
+    // BalloownTexture
+    Texture balloonTexture;
     // Time between each spawn
-    static float SPAWN_INTERVAL = 0.5f;
+    static float SPAWN_INTERVAL = 0.3f;
     // Time since last spawn
     float timeSinceLastSpawn = 0;
     // MapController
@@ -32,6 +34,7 @@ public class ViewModel {
     public ViewModel(){
         this.factory = new BalloonFactory();
         this.mapController = new MapController();
+        this.balloonTexture = getBalloonTexture();
     }
 
     // Updates game, moves balloons and spawn in
@@ -115,10 +118,9 @@ public class ViewModel {
 
     // Returns list of all balloons
     public ArrayList<BalloonRenderData> getBalloonsRenderData(){
-        ArrayList<BalloonRenderData> balloonsRenderData = new ArrayList<>(balloons.size());
-        Texture texture = getBalloonTexture(); 
+        ArrayList<BalloonRenderData> balloonsRenderData = new ArrayList<>(balloons.size()); 
         for(Balloon b : balloons){
-            balloonsRenderData.add(new BalloonRenderData(b.getPosX(), b.getPosY(), b.getWidth(), b.getHeight(), texture));
+            balloonsRenderData.add(new BalloonRenderData(b.getPosX(), b.getPosY(), b.getWidth(), b.getHeight(), balloonTexture));
         }
         return balloonsRenderData;
     }
