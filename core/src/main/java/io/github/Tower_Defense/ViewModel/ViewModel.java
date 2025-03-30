@@ -7,14 +7,24 @@ import java.util.HashMap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import io.github.Tower_Defense.Model.Entity.Balloon;
-import io.github.Tower_Defense.Model.Entity.BalloonFactory;
-import io.github.Tower_Defense.Model.Entity.BalloonRenderData;
-import io.github.Tower_Defense.Model.Entity.BalloonTexture;
+import io.github.Tower_Defense.Model.Entity.Balloon.Balloon;
+import io.github.Tower_Defense.Model.Entity.Balloon.BalloonFactory;
+import io.github.Tower_Defense.Model.Entity.Balloon.BalloonRenderData;
+import io.github.Tower_Defense.Model.Entity.Balloon.BalloonTexture;
+import io.github.Tower_Defense.Model.Entity.Tower.Tower;
 import io.github.Tower_Defense.Model.Grid.CellPosition;
 import io.github.Tower_Defense.Model.Grid.Map.TileSet;
 
 public class ViewModel {
+//** ---------------------------- MAPCONTROLLER  -------------------------- **//
+    // MapController
+    MapController mapController;
+
+//** ---------------------------- TOWERS  --------------------------- **//
+    // List of towers
+    ArrayList<Tower> towers = new ArrayList<>();
+
+//** ---------------------------- BALLOONS  -------------------------- **//
     // Instance Variables
     BalloonFactory factory;
     // List of balloons
@@ -22,13 +32,11 @@ public class ViewModel {
     // Map to store current direction for each balloon
     private Map<Balloon, Character> balloonDirections = new HashMap<>();
     // BalloownTexture
-    Texture balloonTexture;
+    TextureRegion balloonTexture;
     // Time between each spawn
     static float SPAWN_INTERVAL = 0.8f;
     // Time since last spawn
     float timeSinceLastSpawn = 0;
-    // MapController
-    MapController mapController;
 
     // Public constructor
     public ViewModel(){
@@ -43,6 +51,16 @@ public class ViewModel {
         moveBalloons(delta);
     }
 
+//** ---------------------------- TOWER LOGIC  --------------------------- **//
+    public void spawnTower(){
+        
+
+    }
+
+
+
+
+//** ---------------------------- BALLOON LOGIC -------------------------- **//
     // Move all balloons in list
     private void moveBalloons(float delta){
         for(Balloon b:balloons){
@@ -72,7 +90,7 @@ public class ViewModel {
     private boolean isInMiddleOfCell(int posX, int posY) {
         int cellSize = mapController.getCellSize();
         int cellCenterOffset = cellSize / 2;
-        int tolerance = 4; // Allowable deviation in pixels
+        int tolerance = 2; // Allowable deviation in pixels
 
         return Math.abs((posX % cellSize) - cellCenterOffset) <= tolerance &&
                Math.abs((posY % cellSize) - cellCenterOffset) <= tolerance;
@@ -111,7 +129,7 @@ public class ViewModel {
         timeSinceLastSpawn += delta;
         if(timeSinceLastSpawn >= SPAWN_INTERVAL){
             int spawnPosX = mapController.getStartPosX() + getCellSize()/2;
-            int spawnPosY = mapController.getStartPosY() + getCellSize()/2;
+            int spawnPosY = mapController.getStartPosY();
             Balloon newBalloon = factory.getNext(spawnPosX, spawnPosY);
             balloons.add(newBalloon);
             // Initialize direction for new balloon
@@ -121,6 +139,9 @@ public class ViewModel {
     }
 
 
+
+
+//** ---------------------------- GETTERS  ---------------------------- **//
     // Returns list of all balloons
     public ArrayList<BalloonRenderData> getBalloonsRenderData(){
         ArrayList<BalloonRenderData> balloonsRenderData = new ArrayList<>(balloons.size()); 
@@ -130,7 +151,6 @@ public class ViewModel {
         return balloonsRenderData;
     }
     
-
     public int getCellSize(){
         return mapController.getCellSize();
     }
@@ -141,7 +161,7 @@ public class ViewModel {
     }
 
     // Return tile from tileset given tilenum
-    public Texture getBalloonTexture(){
+    public TextureRegion getBalloonTexture(){
         return BalloonTexture.getBalloonTexture();
     }
 

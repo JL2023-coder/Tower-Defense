@@ -1,4 +1,4 @@
-package io.github.Tower_Defense.Model.Entity;
+package io.github.Tower_Defense.Model.Entity.Balloon;
 
 import java.util.ArrayList;
 
