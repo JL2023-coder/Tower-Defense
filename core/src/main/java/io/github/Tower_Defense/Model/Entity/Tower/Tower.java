@@ -5,34 +5,46 @@ import com.badlogic.gdx.math.Rectangle;
 import io.github.Tower_Defense.Model.Entity.Balloon.Balloon;
 import io.github.Tower_Defense.Model.Grid.CellPosition;
 
-public class Tower extends Rectangle{
+public class Tower {
     // Instance Variables
     String towerType;
     float attackSpeed;
-    int attatckDamage;
-    CellPosition position;
+    int attackDamage;
+    CellPosition pos;
+    int width = 32;
+    int height = 32;
 
-    private Tower(String towerType, float attackSpeed, int attatckDamage, CellPosition position){
+    private Tower(String towerType, float attackSpeed, int attackDamage, CellPosition pos){
         this.towerType = towerType;
         this.attackSpeed = attackSpeed;
-        this.attatckDamage = attatckDamage;
-        this.position = position;
+        this.attackDamage = attackDamage;
+        this.pos = pos;
     }
 
-    public Tower addTower(String towerType, CellPosition position){
+    public static Tower newTower(String towerType, CellPosition pos){
         float attackSpeed;
-        int attatckDamage;
+        int attackDamage;
         switch (towerType) {
             case "base":
                 attackSpeed = 1f;
-                attatckDamage = 100;
+                attackDamage = 100;
                 break;
             default:
                 throw new IllegalArgumentException("Uknown type");
         }
 
-        return new Tower(towerType, attackSpeed, attatckDamage, position);
+        return new Tower(towerType, attackSpeed, attackDamage, pos);
     }
 
+    public CellPosition getCellPosition(){
+        return pos;
+    }
+    public int getWidth(){
+        return width;
+    }
+    public int getHeight(){
+        return height;
+    }
 
+    
 }

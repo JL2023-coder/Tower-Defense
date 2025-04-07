@@ -12,6 +12,8 @@ import io.github.Tower_Defense.Model.Entity.Balloon.BalloonFactory;
 import io.github.Tower_Defense.Model.Entity.Balloon.BalloonRenderData;
 import io.github.Tower_Defense.Model.Entity.Balloon.BalloonTexture;
 import io.github.Tower_Defense.Model.Entity.Tower.Tower;
+import io.github.Tower_Defense.Model.Entity.Tower.TowerFactory;
+import io.github.Tower_Defense.Model.Entity.Tower.TowerRenderData;
 import io.github.Tower_Defense.Model.Grid.CellPosition;
 import io.github.Tower_Defense.Model.Grid.Map.TileSet;
 
@@ -21,12 +23,16 @@ public class ViewModel {
     MapController mapController;
 
 //** ---------------------------- TOWERS  --------------------------- **//
+    // Tower factory
+    TowerFactory towerFactory;
     // List of towers
     ArrayList<Tower> towers = new ArrayList<>();
+    // TowerTexture
+    TextureRegion towerTexture;
 
 //** ---------------------------- BALLOONS  -------------------------- **//
-    // Instance Variables
-    BalloonFactory factory;
+    // Balloon factory
+    BalloonFactory balloonFactory;
     // List of balloons
     ArrayList<Balloon> balloons = new ArrayList<Balloon>();
     // Map to store current direction for each balloon
@@ -40,9 +46,14 @@ public class ViewModel {
 
     // Public constructor
     public ViewModel(){
-        this.factory = new BalloonFactory();
+        this.towerFactory = new TowerFactory();
+        this.balloonFactory = new BalloonFactory();
         this.mapController = new MapController();
         this.balloonTexture = getBalloonTexture();
+
+
+//** ---------------------------- TEST  --------------------------- **//
+        spawnTower(new CellPosition(8, 8));
     }
 
     // Updates game, moves balloons and spawn in
@@ -52,15 +63,27 @@ public class ViewModel {
     }
 
 //** ---------------------------- TOWER LOGIC  --------------------------- **//
-    public void spawnTower(){
-        
-
+    private void spawnTower(CellPosition pos){
+        Tower newTower = towerFactory.addTower("base", pos);
+        towers.add(newTower);
     }
 
 
-
-
 //** ---------------------------- BALLOON LOGIC -------------------------- **//
+    // Spawns balloon if timeSinceLastSpawn is larger than SpawnInterval
+    private void spawnBalloon(float delta){
+        timeSinceLastSpawn += delta;
+        if(timeSinceLastSpawn >= SPAWN_INTERVAL){
+            int spawnPosX = mapController.getStartPosX() + getCellSize()/2;
+            int spawnPosY = mapController.getStartPosY();
+            Balloon newBalloon = balloonFactory.getNext(spawnPosX, spawnPosY);
+            balloons.add(newBalloon);
+            // Initialize direction for new balloon
+            balloonDirections.put(newBalloon, 'D'); // or whatever initial direction
+            timeSinceLastSpawn = 0;
+        }
+    }
+
     // Move all balloons in list
     private void moveBalloons(float delta){
         for(Balloon b:balloons){
@@ -124,24 +147,18 @@ public class ViewModel {
         return new CellPosition(row, col);
     }
 
-    // Spawns balloon if timeSinceLastSpawn is larger than SpawnInterval
-    private void spawnBalloon(float delta){
-        timeSinceLastSpawn += delta;
-        if(timeSinceLastSpawn >= SPAWN_INTERVAL){
-            int spawnPosX = mapController.getStartPosX() + getCellSize()/2;
-            int spawnPosY = mapController.getStartPosY();
-            Balloon newBalloon = factory.getNext(spawnPosX, spawnPosY);
-            balloons.add(newBalloon);
-            // Initialize direction for new balloon
-            balloonDirections.put(newBalloon, 'D'); // or whatever initial direction
-            timeSinceLastSpawn = 0;
-        }
-    }
-
-
 
 
 //** ---------------------------- GETTERS  ---------------------------- **//
+    // Returns list of all balloons
+    public ArrayList<TowerRenderData> getTowersRenderData(){
+        ArrayList<TowerRenderData> towersRenderData = new ArrayList<>(towers.size()); 
+        for(Tower t : towers){
+            towersRenderData.add(new TowerRenderData(t.getCellPosition(), t.getWidth(), t.getHeight()));
+        }
+        return towersRenderData;
+    }
+
     // Returns list of all balloons
     public ArrayList<BalloonRenderData> getBalloonsRenderData(){
         ArrayList<BalloonRenderData> balloonsRenderData = new ArrayList<>(balloons.size()); 
